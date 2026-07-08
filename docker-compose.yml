@@ -1,0 +1,39 @@
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-jobportal
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: jobportal
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+
+  backend:
+    build:
+      context: ./JobPortal-backend
+      dockerfile: Dockerfile
+
+    image: jobportal-backend
+    container_name: jobportal-backend
+    restart: always
+
+    depends_on:
+      - mysql
+
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/jobportal
+      DB_USERNAME: root
+      DB_PASSWORD:
+      JWT_SECRET:
+
+    ports:
+      - "8080:8080"
+
+
+volumes:
+  mysql-data:
