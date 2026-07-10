@@ -254,7 +254,8 @@ Sensitive information should never be committed to source control.
 - Swagger/OpenAPI documentation
 - Unit and integration testing
 - CI/CD pipeline
-- Cloud deployment
+- Cloud deployment (
+Tested with ngrok)
 - Admin analytics dashboard
 
 ## Author
