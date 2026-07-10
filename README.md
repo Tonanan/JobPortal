@@ -1,48 +1,61 @@
-# JobPortal - Job Recruitment Platform
+# JobPortal - Online Job Recruitment Platform
 
-![Java](https://img.shields.io/badge/Java-17-blue)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1-brightgreen)
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-4.1-green)
 ![React](https://img.shields.io/badge/React-19-blue)
-![Docker](https://img.shields.io/badge/Docker-Compose-blue)
+![MySQL](https://img.shields.io/badge/MySQL-8-blue)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
 
 ## Overview
 
-JobPortal is a recruitment platform that connects candidates with employers. It uses a Spring Boot REST API backend, a React frontend, and MySQL as the primary database. Authentication is handled with JWT and role-based access control.
+JobPortal is a full-stack recruitment platform designed to connect employers with job seekers through a secure and scalable RESTful API architecture.
+
+The backend is developed with **Java 17**, **Spring Boot**, **Spring Security**, and **Spring Data JPA**, exposing REST APIs protected by **JWT authentication** and **Role-Based Authorization**. The frontend is built with **React** and communicates with the backend using Axios.
+
+The project follows a layered architecture (Controller → Service → Repository) and demonstrates real-world backend development practices including authentication, authorization, DTO mapping, validation, pagination, global exception handling, Docker containerization, and relational database design.
+
+This project was built as a personal portfolio project to strengthen backend engineering skills and simulate the workflow of a real recruitment platform.
 
 ## Features
 
-### Authentication & Authorization
+### Authentication
 
-- Register and login flows
-- JWT authentication for protected endpoints
+- User registration
+- User login
+- JWT-based authentication
+- BCrypt password encryption
+- Stateless authentication
 - Role-based authorization
-- Supported roles:
-  - `ADMIN`
-  - `EMPLOYER`
-  - `CANDIDATE`
 
-### Candidate Features
+---
 
-- View job listings
+### Candidate
+
+- Browse available jobs
 - Search jobs by title and location
-- View job details
-- Apply to a job
-- Track application status
+- View detailed job information
+- Apply for jobs
+- View application history
+- Cancel submitted applications
 
-### Employer Features
+---
+
+### Employer
 
 - Create job postings
-- Update job postings
-- Delete job postings
-- View candidates for a job
-- Review and update application status
+- Edit job postings
+- View all posted jobs
+- Review candidate applications
+- Accept or reject applications
+- Dashboard statistics
 
-### Admin Features
+---
 
-- Admin can access employer-level management endpoints
-- Admin can create, update, and delete jobs through protected routes
-- Admin can view job applications through the same employer-level access controls
+### Administrator
 
+- Manage all job postings
+- Access employer-level endpoints
+- Full CRUD operations
 ## Tech Stack
 
 ### Backend
@@ -50,10 +63,13 @@ JobPortal is a recruitment platform that connects candidates with employers. It 
 - Java 17
 - Spring Boot
 - Spring Security
-- JWT
-- Spring Data JPA / Hibernate
-- MySQL
+- JWT Authentication
+- Spring Data JPA (Hibernate)
 - Maven
+
+### Database
+
+- MySQL
 
 ### Frontend
 
@@ -62,26 +78,46 @@ JobPortal is a recruitment platform that connects candidates with employers. It 
 - Axios
 - React Router
 
-### Deployment
+### DevOps
 
 - Docker
 - Docker Compose
+- Git
+- GitHub
+
+### Development Tools
+
+- Eclipse IDE
+- Postman 
 
 ## Project Structure
 
+```text
 JobPortal
+│
 ├── JobPortal-backend
+│   ├── controller
+│   ├── service
+│   ├── repository
+│   ├── entity
+│   ├── dto
+│   ├── config
+│   ├── filter
+│   └── exception
+│
 ├── jobportal-ui
-├── docker-compose.yml
-└── README.md
+│   ├── pages
+│   ├── components
+│   └── services
+│
+└── docker-compose.yml
+```
 
 ## Database Design
 
-The main entities in this project are:
+<img width="941" height="482" alt="image" src="https://github.com/user-attachments/assets/1054f005-6cac-455d-bc7d-82bb53d978c6" />
 
-- `User`
-- `Job`
-- `JobApplication`
+
 
 ### Relationships
 
@@ -93,29 +129,37 @@ The main entities in this project are:
 
 ### Authentication
 
-- `POST /auth/register`
-- `POST /auth/login`
+| Method | Endpoint |
+|---------|----------|
+| POST | /auth/register |
+| POST | /auth/login |
 
 ### Jobs
 
-- `GET /jobs`
-- `GET /jobs/{id}`
-- `GET /jobs/search?title={title}&location={location}`
-- `POST /jobs`
-- `PUT /jobs/{id}`
-- `DELETE /jobs/{id}`
+| Method | Endpoint |
+|---------|----------|
+| GET | /jobs |
+| GET | /jobs/{id} |
+| GET | /jobs/search |
+| POST | /jobs |
+| PUT | /jobs/{id} |
+| DELETE | /jobs/{id} |
 
 ### Applications
 
-- `POST /jobs/{jobId}/apply`
-- `GET /jobs/{jobId}/applications`
-- `PATCH /jobs/{applicationId}`
-- `DELETE /applications/{id}`
+| Method | Endpoint |
+|---------|----------|
+| POST | /jobs/{jobId}/apply |
+| GET | /jobs/{jobId}/applications |
+| PATCH | /jobs/{applicationId} |
+| DELETE | /applications/{id} |
 
-### Employer / Admin
+### Employer
 
-- `GET /employer/dashboard`
-- `GET /employer/jobs`
+| Method | Endpoint |
+|---------|----------|
+| GET | /employer/dashboard |
+| GET | /employer/jobs |
 
 ## Architecture
 
@@ -125,6 +169,8 @@ The project follows a layered architecture:
 - `Service` contains business logic and interacts with repositories.
 - `Repository` performs database access for entities.
 - `Database` stores persistent data for users, jobs, and applications.
+<img width="4184" height="1632" alt="image" src="https://github.com/user-attachments/assets/4194fdb7-29f5-49a3-8e9b-1964f65ff1df" />
+
 
 ### JWT Security Flow
 
@@ -133,51 +179,88 @@ Client → JWT Token → JwtFilter → Spring Security → Controller
 ## Security Flow
 
 1. Client submits login credentials to `/auth/login`.
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/835a576b-2b6a-49b3-99f0-8ab431639dd0" />
+
 2. Server issues a JWT token.
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/1f0d3938-3bce-4d6b-b3a5-0044c787a06e" />
+
 3. Client sends the token in the `Authorization` header.
 4. `JwtFilter` validates the token.
 5. Spring Security sets the authenticated user in `SecurityContext`.
 6. Access is granted based on user role.
 
-## Running Project
+## Getting Started
 
-Start backend and database containers with Docker Compose:
+### Clone repository
+
+```bash
+git clone https://github.com/your-name/jobportal.git
+```
+
+### Run with Docker
 
 ```bash
 docker compose up --build
 ```
 
-- Backend: `http://localhost:8080`
-- Frontend: `http://localhost:5173`
+### Backend
+
+```
+http://localhost:8080
+```
+
+### Frontend
+
+```
+http://localhost:5173
+```
 
 The frontend is served by Vite and can be started locally using the React project in `jobportal-ui`.
 
-## Environment Configuration
+## Environment Variables
 
-The project uses environment variables for sensitive configuration. Common variables include:
+Create a `.env` file or configure the following variables:
 
-- `DB_URL`
-- `DB_USERNAME`
-- `DB_PASSWORD`
-- `JWT_SECRET`
+```text
+DB_URL=
+DB_USERNAME=
+DB_PASSWORD=
+JWT_SECRET=
+```
 
-Do not commit real credentials to source control.
-
+Sensitive information should never be committed to source control.
 ## Screenshots
 
 - Login Page
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/8887115d-02bd-4a58-8ea1-1115cfc748cf" />
+
 - Job Listing
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/06c773b2-784d-4b2a-a7ed-a25a53d368a0" />
+
 - Job Detail
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/7c88f1f3-5444-466b-8380-47dd3fb8c253" />
+
 - Employer Dashboard
+
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/f4df907c-80af-40f5-95d2-a0e08d00dcee" />
+![Uploading image.png…]()
+
+
 
 ## Future Improvements
 
-- Upload CV support
-- Email notifications for application updates
-- Cloud deployment and CI/CD pipeline
-- Additional test coverage
-- Improved admin dashboard and reporting
+- Resume upload
+- Email notifications
+- Swagger/OpenAPI documentation
+- Unit and integration testing
+- CI/CD pipeline
+- Cloud deployment
+- Admin analytics dashboard
 
 ## Author
 
-Toàn Thịnh
+**Toàn Thịnh**
+
+Java Backend Developer
+
+GitHub: https://github.com/Tonanan
